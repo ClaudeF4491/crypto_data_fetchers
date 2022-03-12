@@ -54,8 +54,12 @@ def poll(
     session = db.create_session()
     metadata = {"source": "cream", "type": "poll"}
 
+    first_run = True
     while True:
-        time.sleep(sleep_dur)  # at beginning to handle continue calls
+        if first_run:
+            first_run = False
+        else:
+            time.sleep(sleep_dur)  # at beginning to handle continue calls
 
         # Fetch latest data
         logging.info("Fetching CREAM Finance token states ...")
