@@ -1,5 +1,5 @@
 """
-API to interface with CREAM Finance
+API to interface with CREAM Finance public API
 """
 from adapters.apis.base import BaseAdapter
 from adapters.apis.util import calculate_apy_from_rate, get_url_json
@@ -28,7 +28,7 @@ class CreamAdapter(BaseAdapter):
     _mantissa = 10**18
 
     @classmethod
-    def get(cls, *args, **kwargs):
+    def get(cls, *args, **kwargs) -> Dict[str, Any]:
         """Wrapper to run class generically"""
         return cls.get_all_token_histories(*args, **kwargs)
 
