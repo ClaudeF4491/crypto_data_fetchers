@@ -15,7 +15,3 @@ repos:
     hooks:
       - id: flake8
         args: [--max-line-length=88]
-  - repo: https://github.com/prettier/pre-commit
-    rev: 2.1.2
-    hooks:
-      - id: prettier
