@@ -20,8 +20,12 @@ import logging
 import requests
 from typing import Any, Dict, Optional, Union
 
+BACKOFF_MAX_TRIES = 8  # With exponential, 7 retries = 30 sec, 8 retries ~1.5 min
 
-@backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
+
+@backoff.on_exception(
+    backoff.expo, requests.exceptions.RequestException, max_tries=BACKOFF_MAX_TRIES
+)
 def send_discord_msg(webhook_url: str, data: Dict[str, str], timeout=None):
     """
     Send message to Discord channel via webhook.

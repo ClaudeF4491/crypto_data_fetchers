@@ -16,9 +16,12 @@ BLOCKS_PER_YEAR = {
     "arbitrum": 2102400,
     "avalanche": 31536e3,
 }
+BACKOFF_MAX_TRIES = 8  # With exponential, 7 retries = 30 sec, 8 retries ~1.5 min
 
 
-@backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
+@backoff.on_exception(
+    backoff.expo, requests.exceptions.RequestException, max_tries=BACKOFF_MAX_TRIES
+)
 def get_url_json(url, params=None, timeout=None):
     """
     URL JSON getter, wrapped in an exponential backoff strategy

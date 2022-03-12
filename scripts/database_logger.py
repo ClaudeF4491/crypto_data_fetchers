@@ -8,13 +8,15 @@ $ python3 scripts/database_logger.py \
     user \
     database.url.rds.amazonaws.com \
     database_name \
-    3306
+    3306 \
+    --discord-webhook-url [OPTIONAL_DISCORD_WEBHOOK]
 where 30 is number of seconds until poll.
 """
 
 from adapters.apis.cream import CreamAdapter
 from adapters.database_adapter import DatabaseAdapter, RawEvent
 from datetime import datetime
+from interfaces.handlers import DiscordHandler
 import json
 import logging
 import time
@@ -32,6 +34,8 @@ def poll(
     database: str,
     port: int,
     password: str = typer.Option(None, prompt=True, hide_input=True),
+    discord_webhook_url: str = typer.Option(None),
+    discord_username: str = typer.Option("CryptoDataFetcher"),
 ) -> None:
     """
     Polls periodically to retrieve data from API and save it to database.
@@ -43,10 +47,22 @@ def poll(
         database: database to connect to
         port: DB port
         password: Password to connect to DB
+        discord_webhook_url: Optional webhook to push logging.error() log
+            events to Discord channel
+        discord_username: Username to use when sending messages to Discord
+            channel
 
     Returns:
         None
     """
+    # Initialize Discord notifier
+    if discord_webhook_url:
+        logging.getLogger().addHandler(
+            DiscordHandler(
+                discord_webhook_url, logging.ERROR, {"username": discord_username}
+            )
+        )
+
     # Create database adapter
     db = DatabaseAdapter(hostname, username, password, database, port)
 
