@@ -56,6 +56,10 @@ class CreamAdapter(BaseAdapter):
         for t in token_states:
             t["timestamp"] = timestamp
             t["comptroller"] = comptroller
+            total_supply = float(t["totalBorrows"]) + float(t["cash"])
+            t["utilization_rate"] = None
+            if total_supply > 0:
+                t["utilization_rate"] = float(t["totalBorrows"]) / total_supply * 100
 
         return token_states
 
@@ -127,6 +131,7 @@ class CreamAdapter(BaseAdapter):
         for t in token_history:
             t["comptroller"] = comptroller
             total_supply = float(t["totalBorrows"]) + float(t["cash"])
+            t["utilization_rate"] = None
             if total_supply > 0:
                 t["utilization_rate"] = float(t["totalBorrows"]) / total_supply * 100
 
