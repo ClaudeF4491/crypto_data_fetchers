@@ -10,8 +10,11 @@ from typing import Optional, List
 
 app = typer.Typer()
 
+
 @app.command()
-def download(output_path: str, comptrollers: Optional[List[str]] = typer.Argument(None)) -> None:
+def download(
+    output_path: str, comptrollers: Optional[List[str]] = typer.Argument(None)
+) -> None:
     """
     Downloads all CREAM Finance data available across all tokens and history.
     It then saves it to a local JSON file.
@@ -31,10 +34,11 @@ def download(output_path: str, comptrollers: Optional[List[str]] = typer.Argumen
         json.dump(results, f)
     logging.info("Done!")
 
+
 if __name__ == "__main__":
     logging.basicConfig(
-        format='%(asctime)s %(levelname)-8s %(message)s',
+        format="%(asctime)s %(levelname)-8s %(message)s",
         level=logging.INFO,
-        datefmt='%Y-%m-%d %H:%M:%S'
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
     app()

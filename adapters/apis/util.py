@@ -17,6 +17,7 @@ BLOCKS_PER_YEAR = {
     "avalanche": 31536e3,
 }
 
+
 @backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
 def get_url_json(url, params=None, timeout=None):
     """
@@ -48,9 +49,14 @@ def calculate_apy_from_rate(rate: int, blocks_per_year: Union[int, str], mantiss
         blocks_per_year: Number of blocks per year as int OR name of protocol to auto-lookup
     """  # NOQA
     if isinstance(blocks_per_year, str):
-        blocks_per_year = BLOCKS_PER_YEAR[blocks_per_year]  # Fetch from lookup using protocol
+        blocks_per_year = BLOCKS_PER_YEAR[
+            blocks_per_year
+        ]  # Fetch from lookup using protocol
     try:
-        apy = 100 + ((((rate / mantissa * blocks_per_year / 365 + 1) ** 365 - 1)) - 1) * 100
+        apy = (
+            100
+            + ((((rate / mantissa * blocks_per_year / 365 + 1) ** 365 - 1)) - 1) * 100
+        )
     except OverflowError:
         apy = np.nan
     return apy

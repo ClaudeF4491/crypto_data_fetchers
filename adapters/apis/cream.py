@@ -29,7 +29,7 @@ class CreamAdapter(BaseAdapter):
 
     @classmethod
     def get(cls, *args, **kwargs):
-        """ Wrapper to run class generically """
+        """Wrapper to run class generically"""
         return cls.get_all_token_histories(*args, **kwargs)
 
     @classmethod
@@ -72,7 +72,8 @@ class CreamAdapter(BaseAdapter):
         Fetches all token states for given comptroller in parallel.
 
         Args:
-            comptrollers: List of comptrollers to iterate over. If None, uses all defaults
+            comptrollers: List of comptrollers to iterate over. If None,
+                uses all defaults
             n_jobs: Number of jobs for joblib
             timeout: Timeout in seconds for request.get
             verbose: Verbosity level for joblib
@@ -144,7 +145,8 @@ class CreamAdapter(BaseAdapter):
         comptroller and fetches history for each one.
 
         Args:
-            comptrollers: List of comptrollers to iterate over. If None, uses all defaults
+            comptrollers: List of comptrollers to iterate over.
+                If None, uses all defaults
             n_jobs: Number of jobs for joblib
             timeout: Timeout in seconds for request.get
             verbose: Verbosity level for joblib
@@ -166,7 +168,6 @@ class CreamAdapter(BaseAdapter):
 
         # Set up functions to parallelize to fetch history for all tokens
         delayed_funcs = list()
-        lookup = list()
         for token in all_token_states:
             d_fn = delayed(cls.get_token_history)(
                 token["token_address"], token["comptroller"], timeout
@@ -203,6 +204,7 @@ class CreamAdapter(BaseAdapter):
 
         return token_histories
 
+
 if __name__ == "__main__":
 
     # Config
@@ -210,7 +212,9 @@ if __name__ == "__main__":
 
     # Fetch token states for single comptroller
     print("Fetching current token states from comptroller={comptroller} ...")
-    avax_token_states = CreamAdapter.get_current_token_states_by_comptroller(comptroller)
+    avax_token_states = CreamAdapter.get_current_token_states_by_comptroller(
+        comptroller
+    )
 
     # for use later
     test_token = avax_token_states[0]
@@ -223,7 +227,7 @@ if __name__ == "__main__":
     print("Fetching all current token states across all comptrollers ...")
     all_token_states = CreamAdapter.get_all_current_token_states()
     print(f"Fetched {len(all_token_states)} records.")
-    print(f"Example of the most recent sample from the last token fetched:")
+    print("Example of the most recent sample from the last token fetched:")
     pprint(all_token_states[-1])
 
     # Fetch history of one token
@@ -237,8 +241,14 @@ if __name__ == "__main__":
     pprint(token_history[-1])
 
     # Fetch all history of all tokens
-    print("Fetching all tokens and all history for them (this may take a minute or two) ...")
+    print(
+        "Fetching all tokens and all history for them "
+        "(this may take a minute or two) ..."
+    )
     all_histories = CreamAdapter.get_all_token_histories(verbose=10)
-    print(f"Fetched {len(all_histories)} records. This is every history record of every token.")
-    print(f"Example sample:")
+    print(
+        f"Fetched {len(all_histories)} records. "
+        f"This is every history record of every token."
+    )
+    print("Example sample:")
     pprint(all_histories[-1][-1])

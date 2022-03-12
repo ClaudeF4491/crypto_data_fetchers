@@ -1,5 +1,7 @@
 backoff
 joblib
 numpy
+pymysql
+sqlalchemy
 requests
 typer
