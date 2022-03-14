@@ -14,6 +14,7 @@ where 30 is number of seconds until poll.
 """
 
 from adapters.apis.cream import CreamAdapter
+from adapters.apis.alpha_homora import AlphaHomoraAdapter
 from adapters.database_adapter import DatabaseAdapter, RawEvent
 from datetime import datetime
 from interfaces.handlers import DiscordHandler
@@ -21,9 +22,17 @@ import json
 import logging
 import time
 import typer
-from typing import List
+from typing import List, Optional
 
 app = typer.Typer()
+
+# Define a list of available API interfaces, keyed on a string label
+# and mapped to the requests functiont o call
+API_INTERFACES = {
+    "cream": CreamAdapter.get_all_current_token_states,
+    "alpha_homora_apy": AlphaHomoraAdapter.get_apy,
+    "alpha_homora_positions": AlphaHomoraAdapter.get_positions,
+}
 
 
 @app.command()
@@ -34,6 +43,7 @@ def poll(
     database: str,
     port: int,
     password: str = typer.Option(None, prompt=True, hide_input=True),
+    interfaces: Optional[List[str]] = typer.Option(list(API_INTERFACES.keys())),
     discord_webhook_url: str = typer.Option(None),
     discord_username: str = typer.Option("CryptoDataFetcher"),
 ) -> None:
@@ -47,6 +57,8 @@ def poll(
         database: database to connect to
         port: DB port
         password: Password to connect to DB
+        interfaces: List of API interfaces to fetch data from. See keys of
+            `API_INTERFACES` for options. Defaults to all available keys.
         discord_webhook_url: Optional webhook to push logging.error() log
             events to Discord channel
         discord_username: Username to use when sending messages to Discord
@@ -68,7 +80,6 @@ def poll(
 
     # Intialize a session
     session = db.create_session()
-    metadata = {"source": "cream", "type": "poll"}
 
     first_run = True
     while True:
@@ -78,32 +89,35 @@ def poll(
             time.sleep(sleep_dur)  # at beginning to handle continue calls
 
         # Fetch latest data
-        logging.info("Fetching CREAM Finance token states ...")
-        try:
-            results = CreamAdapter.get_all_current_token_states()
-            logging.info(f"Fetched data for {len(results)} tokens.")
-        except Exception as e:
-            logging.error(f"Unable to fetch data. Error: {e}", exc_info=True)
-            continue
+        for interface in interfaces:
+            fn = API_INTERFACES[interface]
+            logging.info(f"Fetching {interface} data via function: {fn} ...")
+            try:
+                results = fn()
+                logging.info(f"Fetched {len(results)} records.")
+            except Exception as e:
+                logging.error(f"Unable to fetch data. Error: {e}", exc_info=True)
+                continue
 
-        logging.info("Logging results to database ...")
-        # Create event object
-        try:
-            timestamp = datetime.utcnow()
-            events: List[RawEvent] = list()
-            for r in results:
-                event = RawEvent(
-                    timestamp=timestamp,
-                    event=json.dumps(r),
-                    metadata_=json.dumps(metadata),
-                )
-                events.append(event)
-            session.add_all(events)
-            session.commit()
-            logging.info(f"Logged {len(events)} records.")
-        except Exception as e:
-            logging.error(f"Unable to log to database. Error: {e}", exc_info=True)
-            continue
+            logging.info("Logging results to database ...")
+            metadata = {"source": interface, "type": "poll"}
+            # Create event object
+            try:
+                timestamp = datetime.utcnow()
+                events: List[RawEvent] = list()
+                for r in results:
+                    event = RawEvent(
+                        timestamp=timestamp,
+                        event=json.dumps(r),
+                        metadata_=json.dumps(metadata),
+                    )
+                    events.append(event)
+                session.add_all(events)
+                session.commit()
+                logging.info(f"Logged {len(events)} records.")
+            except Exception as e:
+                logging.error(f"Unable to log to database. Error: {e}", exc_info=True)
+                continue
 
 
 if __name__ == "__main__":
