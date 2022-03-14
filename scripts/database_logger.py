@@ -32,6 +32,7 @@ API_INTERFACES = {
     "cream": CreamAdapter.get_all_current_token_states,
     "alpha_homora_apy": AlphaHomoraAdapter.get_apy,
     "alpha_homora_positions": AlphaHomoraAdapter.get_positions,
+    "alpha_homora_pools": AlphaHomoraAdapter.get_pools,
 }
 
 

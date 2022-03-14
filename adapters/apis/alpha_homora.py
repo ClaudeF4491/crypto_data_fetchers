@@ -11,6 +11,7 @@ class AlphaHomoraAdapter(BaseAdapter):
     # Endpoints to fetch live data from Alpha Homora v2
     _apy_url = "https://homora-api.alphafinance.io/v2/43114/apys"
     _positions_url = "https://homora-api.alphafinance.io/v2/43114/positions"
+    _pools_url = "https://homora-api.alphafinance.io/v2/43114/pools"
 
     @classmethod
     def get(cls, *args, **kwargs):
@@ -45,6 +46,20 @@ class AlphaHomoraAdapter(BaseAdapter):
         position_data = get_url_json(cls._positions_url, timeout=timeout)
         return position_data
 
+    @classmethod
+    def get_pools(cls, timeout: Optional[float] = None) -> List[Dict[str, Any]]:
+        """
+        Retrieve current status of all pools from Alpha Homora
+
+        Args:
+            timeout: time in seconds to wait before timeout occurs
+
+        Returns:
+            pool_data: List of pools and their current status
+        """
+        pool_data = get_url_json(cls._pools_url, timeout=timeout)
+        return pool_data
+
 
 if __name__ == "__main__":
     print("Fetching APY data ...")
@@ -58,3 +73,9 @@ if __name__ == "__main__":
     print(f"Fetched {len(position_data)} position records.")
     print("Sample:")
     pprint(position_data[0])
+
+    print("Fetching pool data ...")
+    pool_data = AlphaHomoraAdapter.get_pools()
+    print(f"Fetched {len(pool_data)} pool records.")
+    print("Sample:")
+    pprint(pool_data[0])
