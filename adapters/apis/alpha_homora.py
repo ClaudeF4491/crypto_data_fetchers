@@ -19,7 +19,7 @@ class AlphaHomoraAdapter(BaseAdapter):
         return cls.get_all_token_histories(*args, **kwargs)
 
     @classmethod
-    def get_apy(cls, timeout: Optional[float] = None) -> Dict[str, Any]:
+    def get_apy(cls, timeout: Optional[float] = None) -> List[Dict[str, Any]]:
         """
         Retrieve current APY for all pools.
 
@@ -30,6 +30,13 @@ class AlphaHomoraAdapter(BaseAdapter):
             apy_data: APY (total, trading, farming) data broken out by pool
         """
         apy_data = get_url_json(cls._apy_url, timeout=timeout)
+        # Convert to list output
+        tlist = list()
+        for k, v in apy_data.items():
+            el = v
+            el["pool"] = k
+            tlist.append(el)
+        apy_data = tlist
         return apy_data
 
     @classmethod
