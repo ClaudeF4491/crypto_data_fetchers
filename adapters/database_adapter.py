@@ -4,7 +4,7 @@ Adapters for external databases via SQLAlchemy ORM.
 import json
 import logging
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, Float, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -89,6 +89,34 @@ class RawEvent(Base):
     timestamp = Column(DateTime)
     event = Column(String)
     metadata_ = Column("metadata", String)
+
+    def __str__(self) -> str:
+        return record_to_str(self)
+
+
+class AlphaHomoraPool(Base):
+    """SQLAlchemy object to represent a raw event."""
+
+    __tablename__ = "alpha_homora_pools_scrape"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    timestamp = Column(DateTime)
+    chain = Column(String)
+    strategy = Column(String)
+    pool = Column(String)
+    protocol = Column(String)
+    leverage_min = Column(Float)
+    leverage_max = Column(Float)
+    leverage_highest_apr = Column(Float)
+    apr_min = Column(Float)
+    apr_max = Column(Float)
+    apy_trading_fee = Column(Float)
+    apr_farming = Column(Float)
+    apr_reward = Column(Float)
+    apy_borrow = Column(Float)
+    trading_volume_24h = Column(Float)
+    tvl_pool = Column(Float)
+    tvl_homora = Column(Float)
+    positions = Column(Integer)
 
     def __str__(self) -> str:
         return record_to_str(self)
