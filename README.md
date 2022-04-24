@@ -28,6 +28,7 @@ specific instructions to set up.
 
 ## Setup
 
+1. Install firefox on your system
 1. Download geckodriver from [here](https://github.com/mozilla/geckodriver/releases).
   1. Choose your operating system package in the release section
   1. Unpack, and copy to your PATH directory (e.g. `/usr/local/bin/)
