@@ -1,0 +1,32 @@
+database:
+  enabled: False  # Set to True to write to DB. False to skip
+  username: username
+  hostname: database.hostname
+  database: scrape_data
+  port: 3306
+  # NB: password is CLI argument
+discord:
+  username: AlphaHomoraScraper
+  # NB: webhook address is CLI argument
+output:
+  enabled: True  # Set to true to append to given file. False to skip
+  # Filename is written as JSON Lines, and appended to
+  filename: alpha_homora_scrape_data.jsonl
+alpha_homora:
+  # case sensitive and should match what's needed in scraper
+  chains: [Ethereum, Fantom, Avalanche]
+scrape:
+  sleep:
+    # Num seconds between each full fetch
+    fetch: 900
+    # Num seconds to wait for page to load since it takes some time
+    load: 10.0
+    # Num seconds to wait before fetching next chain (inner-loop, N chains per fetch)
+    chain: 5.0
+  # number of waits until give up on loading page
+  max_waits: 6
+selenium:
+  # Set this to the path of `geckodriver` if it is somewhere outside PATH
+  executable_path: null
+  metamask:
+    path: metamask-10.12.4-an+fx.xpi
