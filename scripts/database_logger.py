@@ -47,6 +47,7 @@ def poll(
     interfaces: Optional[List[str]] = typer.Option(list(API_INTERFACES.keys())),
     discord_webhook_url: str = typer.Option(None),
     discord_username: str = typer.Option("CryptoDataFetcher"),
+    once: bool = typer.Option(False),
 ) -> None:
     """
     Polls periodically to retrieve data from API and save it to database.
@@ -64,6 +65,7 @@ def poll(
             events to Discord channel
         discord_username: Username to use when sending messages to Discord
             channel
+        once: Flag to only run once if set to True. If False, runs forever
 
     Returns:
         None
@@ -83,7 +85,12 @@ def poll(
     session = db.create_session()
 
     first_run = True
-    while True:
+    enabled = True
+    while enabled:
+        if once:
+            # Disable after first run if not looping forever
+            enabled = False
+
         if first_run:
             first_run = False
         else:

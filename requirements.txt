@@ -1,7 +1,10 @@
 backoff
 joblib
+jsonlines
 numpy
 pymysql
+pyyaml
+selenium==3.141.0
 sqlalchemy
 requests
 typer
