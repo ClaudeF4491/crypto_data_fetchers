@@ -29,12 +29,8 @@ class CreamAdapter(BaseAdapter):
 
     @classmethod
     def get(cls, *args, **kwargs) -> List[List[Dict[str, Any]]]:
-        """
-        Wrapper to run class generically.
-        Returns packed as a list so it is seen as a single event
-        """
-        data = cls.get_all_current_token_states(*args, **kwargs)
-        return [data]
+        """Wrapper to run class generically."""
+        return cls.get_all_current_token_states(*args, **kwargs)
 
     @classmethod
     def get_current_token_states_by_comptroller(
