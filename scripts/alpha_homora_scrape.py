@@ -395,11 +395,12 @@ def scrape(
 
                 if wait_cnt == max_waits:
                     logging.warning(
-                        "\tReached max waits. Giving up and reading what we have."
+                        "\tReached max waits. Giving up and skipping this chain."
                     )
-                logging.info(f"\tFound {len(els_text)} raw text elements. Parsing.")
+                    continue
 
                 # Loop through generating objects
+                logging.info(f"\tFound {len(els_text)} raw text elements. Parsing.")
                 data_chain = parse_rows(els_text)
 
                 # Enrich each with global fields
