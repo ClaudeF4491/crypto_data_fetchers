@@ -13,8 +13,9 @@ $ python3 scripts/database_logger.py \
 where 30 is number of seconds until poll.
 """
 
-from adapters.apis.cream import CreamAdapter
+from adapters.apis.alpaca_finance import AlpacaFinanceAdapter
 from adapters.apis.alpha_homora import AlphaHomoraAdapter
+from adapters.apis.cream import CreamAdapter
 from adapters.database_adapter import DatabaseAdapter, RawEvent
 from datetime import datetime
 from interfaces.handlers import DiscordHandler
@@ -29,10 +30,11 @@ app = typer.Typer()
 # Define a list of available API interfaces, keyed on a string label
 # and mapped to the requests functiont o call
 API_INTERFACES = {
-    "cream": CreamAdapter.get_all_current_token_states,
+    "alpaca_finance_pools": AlpacaFinanceAdapter.get,
     "alpha_homora_apy": AlphaHomoraAdapter.get_apy,
     "alpha_homora_positions": AlphaHomoraAdapter.get_positions,
     "alpha_homora_pools": AlphaHomoraAdapter.get_pools,
+    "cream": CreamAdapter.get_all_current_token_states,
 }
 
 
