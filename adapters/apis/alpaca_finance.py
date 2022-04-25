@@ -7,6 +7,7 @@ Alpha Homora, they don't do as many frontend calculations from it.
 from adapters.apis.base import BaseAdapter
 from adapters.apis.util import get_url_json
 from pprint import pprint
+from typing import Any, Dict, List
 
 
 class AlpacaFinanceAdapter(BaseAdapter):
@@ -16,15 +17,15 @@ class AlpacaFinanceAdapter(BaseAdapter):
     )
 
     @classmethod
-    def get(cls):
+    def get(cls) -> List[Dict[str, Any]]:
         """Wrapper to run class generically"""
-        return get_url_json(cls._json_url)
+        return [get_url_json(cls._json_url)]
 
 
 if __name__ == "__main__":
     print("Fetching pool data ...")
-    data = AlpacaFinanceAdapter.get()
-    farming_pools = data["data"]["farmingPools"]
+    resp = AlpacaFinanceAdapter.get()
+    farming_pools = resp[0]["data"]["farmingPools"]
     print(f"Fetched {len(farming_pools)} pools.")
     print("Sample:")
     pprint(farming_pools[0])
