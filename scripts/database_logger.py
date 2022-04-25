@@ -114,17 +114,19 @@ def poll(
             # Create event object
             try:
                 timestamp = datetime.utcnow()
-                events: List[RawEvent] = list()
-                for r in results:
-                    event = RawEvent(
-                        timestamp=timestamp,
-                        event=json.dumps(r),
-                        metadata_=json.dumps(metadata),
-                    )
-                    events.append(event)
-                session.add_all(events)
+                # Force pack into a single event so one record per data pull
+                n_record = 1
+                if len(results) > 0:
+                    n_record = len(results)
+                    results = [results]
+                event = RawEvent(
+                    timestamp=timestamp,
+                    event=json.dumps(results),
+                    metadata_=json.dumps(metadata),
+                )
+                session.add(event)
                 session.commit()
-                logging.info(f"Logged {len(events)} records.")
+                logging.info(f"Logged event containing {n_record} records.")
             except Exception as e:
                 logging.error(f"Unable to log to database. Error: {e}", exc_info=True)
                 continue
