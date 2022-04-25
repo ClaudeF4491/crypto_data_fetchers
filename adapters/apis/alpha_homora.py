@@ -16,7 +16,7 @@ class AlphaHomoraAdapter(BaseAdapter):
     @classmethod
     def get(cls, *args, **kwargs):
         """Wrapper to run class generically"""
-        return cls.get_all_token_histories(*args, **kwargs)
+        raise NotImplementedError
 
     @classmethod
     def get_apy(cls, timeout: Optional[float] = None) -> List[Dict[str, Any]]:
