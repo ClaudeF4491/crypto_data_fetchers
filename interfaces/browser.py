@@ -11,6 +11,7 @@ from typing import Optional, Sequence, Union
 def init_driver_firefox(
     executable_path: Optional[str] = None,
     extension_paths: Optional[Sequence[str]] = None,
+    headless: bool = True,
 ) -> webdriver.Firefox:
     """
     Initializes Selenium Firefox webdriver.
@@ -19,12 +20,12 @@ def init_driver_firefox(
     Args:
         executable_path: Path to geckodriver executable. Defaults to looking in PATH
         extension_path: Optional list of extension files (e.g. .xpi type)
-
+        headless: Flag to run headless
     Returns:
         driver: Initialized driver
     """
     opts = webdriver.FirefoxOptions()
-    opts.headless = True
+    opts.headless = headless
     if executable_path:
         logging.debug(
             f"Initializing Firefox driver using executable: {executable_path}"
