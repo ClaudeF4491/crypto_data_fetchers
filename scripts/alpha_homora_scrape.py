@@ -445,6 +445,9 @@ def scrape(
             logging.info(f"Sleeping for {fetch_sleep} seconds ...")
             sleep(fetch_sleep)
 
+    # Cleanup
+    driver.quit()
+
 
 if __name__ == "__main__":
     logging.basicConfig(
