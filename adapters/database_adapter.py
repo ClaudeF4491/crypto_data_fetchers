@@ -81,6 +81,34 @@ class DatabaseAdapter:
         return self._sessionmaker()
 
 
+class CreamFinanceState(Base):
+    """SQLAlchemy object to represent a Cream Finance state."""
+
+    __tablename__ = "cream_finance_states"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    timestamp = Column(DateTime)
+    address = Column(String)
+    comptroller = Column(String)
+    symbol = Column(String)
+    underlying_symbol = Column(String)
+    borrow_apy = Column(Float)
+    supply_apy = Column(Float)
+    utilization_rate = Column(Float)
+    cash = Column(Float)
+    cashUSD = Column(Float)
+    totalBorrows = Column(Float)
+    totalBorrowsUSD = Column(Float)
+    totalReserves = Column(Float)
+    totalReservesUSD = Column(Float)
+    borrowRatePerBlock = Column(Float)
+    supplyRatePerBlock = Column(Float)
+    exchangeRate = Column(Float)
+    underlyingDecimals = Column(Integer)
+
+    def __str__(self) -> str:
+        return record_to_str(self)
+
+
 class RawEvent(Base):
     """SQLAlchemy object to represent a raw event."""
 
@@ -95,7 +123,7 @@ class RawEvent(Base):
 
 
 class AlphaHomoraPool(Base):
-    """SQLAlchemy object to represent a raw event."""
+    """SQLAlchemy object to represent a Alpha Homora Pool data."""
 
     __tablename__ = "alpha_homora_pools_scrape"
     id = Column(Integer, primary_key=True, autoincrement=True)
