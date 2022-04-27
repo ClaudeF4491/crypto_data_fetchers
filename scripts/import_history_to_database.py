@@ -131,6 +131,9 @@ def insert(
             if np.isnan(cream_state.cashUSD):
                 cream_state.cashUSD = None
 
+        if cream_state.cash and cream_state.cashUSD:
+            cream_state.price = cream_state.cashUSD / cream_state.cash
+
         t = r.get("totalBorrows")
         if t:
             cream_state.totalBorrows = float(int(t) / 10**decimals)

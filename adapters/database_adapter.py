@@ -104,6 +104,7 @@ class CreamFinanceState(Base):
     supplyRatePerBlock = Column(Float)
     exchangeRate = Column(Float)
     underlyingDecimals = Column(Integer)
+    price = Column(Float)
 
     def __str__(self) -> str:
         return record_to_str(self)
