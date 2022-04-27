@@ -1,7 +1,7 @@
 
 CREATE TABLE IF NOT EXISTS cream_finance_states (
 	id int AUTO_INCREMENT PRIMARY KEY,
-    timestamp TIMESTAMP,
+    timestamp datetime,
     address text,
     comptroller text,
     symbol text,
@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS cream_finance_states (
     supplyRatePerBlock float NULL,
     exchangeRate float NULL,
     underlyingDecimals int NULL,
+    price float NULL,
     INDEX address (address),
     INDEX comptroller (symbol),
     INDEX symbol (symbol),
