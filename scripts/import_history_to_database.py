@@ -131,9 +131,6 @@ def insert(
             if np.isnan(cream_state.cashUSD):
                 cream_state.cashUSD = None
 
-        if cream_state.cash and cream_state.cashUSD:
-            cream_state.price = cream_state.cashUSD / cream_state.cash
-
         t = r.get("totalBorrows")
         if t:
             cream_state.totalBorrows = float(int(t) / 10**decimals)
@@ -175,6 +172,14 @@ def insert(
             cream_state.exchangeRate = float(int(t) / 10**decimals)
             if np.isnan(cream_state.exchangeRate):
                 cream_state.exchangeRate = None
+
+        # Attampt to infer price using one of a few different field combos
+        if cream_state.cash and cream_state.cashUSD:
+            cream_state.price = cream_state.cashUSD / cream_state.cash
+        if cream_state.totalReserves and cream_state.totalReservesUSD:
+            cream_state.price = cream_state.totalReservesUSD / cream_state.totalReserves
+        if cream_state.totalBorrows and cream_state.totalBorrowsUSD:
+            cream_state.price = cream_state.totalBorrowsUSD / cream_state.totalBorrows
 
         states.append(cream_state)
 
