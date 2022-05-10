@@ -1,5 +1,5 @@
 CREATE TABLE events_raw (
-  id mediumint(9) DEFAULT NULL,
+  id int AUTO_INCREMENT PRIMARY KEY,
   timestamp datetime NOT NULL,
   event longtext NOT NULL,
   metadata text DEFAULT NULL,
