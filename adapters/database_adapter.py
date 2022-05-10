@@ -118,6 +118,7 @@ class RawEvent(Base):
     timestamp = Column(DateTime)
     event = Column(String)
     metadata_ = Column("metadata", String)
+    source = Column(String)
 
     def __str__(self) -> str:
         return record_to_str(self)
