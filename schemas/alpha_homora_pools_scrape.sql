@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS alpha_homora_pools_scrape (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    timestamp TIMESTAMP,
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp datetime,
     chain text,
     strategy text,
     pool text,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS alpha_homora_pools_scrape (
     tvl_pool float NULL,
     tvl_homora float NULL,
     positions int NULL,
-    INDEX idx_timestamp (timestamp),	
+    INDEX idx_timestamp (timestamp),
     INDEX idx_pool (pool),
     INDEX idx_chain (chain),
     INDEX idx_protocol (protocol),

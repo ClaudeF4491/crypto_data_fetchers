@@ -110,7 +110,8 @@ def poll(
                 continue
 
             logging.info("Logging results to database ...")
-            metadata = {"source": interface, "type": "poll"}
+            source = interface
+            metadata = {"source": source, "type": "poll"}
             # Create event object
             try:
                 timestamp = datetime.utcnow()
@@ -123,6 +124,7 @@ def poll(
                     timestamp=timestamp,
                     event=json.dumps(results),
                     metadata_=json.dumps(metadata),
+                    source=source,
                 )
                 session.add(event)
                 session.commit()
