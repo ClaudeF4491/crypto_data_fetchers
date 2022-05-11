@@ -2,6 +2,7 @@ backoff
 joblib
 jsonlines
 numpy
+pandas
 pymysql
 pyyaml
 selenium==3.141.0
