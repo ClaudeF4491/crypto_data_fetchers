@@ -8,4 +8,5 @@ pyyaml
 selenium==3.141.0
 sqlalchemy
 requests
+tqdm
 typer
