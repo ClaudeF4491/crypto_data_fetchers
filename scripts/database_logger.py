@@ -15,6 +15,7 @@ where 30 is number of seconds until poll.
 
 from adapters.apis.alpaca_finance import AlpacaFinanceAdapter
 from adapters.apis.alpha_homora import AlphaHomoraAdapter
+from adapters.apis.coindix import CoinDixAdapter
 from adapters.apis.cream import CreamAdapter
 from adapters.database_adapter import DatabaseAdapter, RawEvent
 from datetime import datetime
@@ -35,6 +36,7 @@ API_INTERFACES = {
     "alpha_homora_positions": AlphaHomoraAdapter.get_positions,
     "alpha_homora_pools": AlphaHomoraAdapter.get_pools,
     "cream": CreamAdapter.get,
+    "coindix": CoinDixAdapter.get,
 }
 
 

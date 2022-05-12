@@ -22,12 +22,13 @@ BACKOFF_MAX_TRIES = 8  # With exponential, 7 retries = 30 sec, 8 retries ~1.5 mi
 @backoff.on_exception(
     backoff.expo, requests.exceptions.RequestException, max_tries=BACKOFF_MAX_TRIES
 )
-def get_url_json(url, params=None, timeout=None):
+def get_url_json(url, headers=None, params=None, timeout=None):
     """
     URL JSON getter, wrapped in an exponential backoff strategy
 
     Args:
         url: URL to run requests.get on
+        headers: headers to pass to get
         params: params to pass to get
         timeout: Time to wait in seconds until timeout
 
@@ -37,7 +38,7 @@ def get_url_json(url, params=None, timeout=None):
     Raises:
         RequestException: Any request exception, after backoff complete
     """
-    resp = requests.get(url, params=params, timeout=timeout)
+    resp = requests.get(url, headers=headers, params=params, timeout=timeout)
     resp.raise_for_status()
     return resp.json()
 
