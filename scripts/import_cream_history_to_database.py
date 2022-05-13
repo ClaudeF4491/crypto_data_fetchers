@@ -3,7 +3,7 @@ Given JSON file from history export, inserts each record
 into a table as a unique event
 
 Example Usage:
-python3 scripts/import_history_to_database.py \
+python3 scripts/import_cream_history_to_database.py \
     cream_finance_history.json \
     cream
     admin \
