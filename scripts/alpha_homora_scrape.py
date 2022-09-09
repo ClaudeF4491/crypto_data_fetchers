@@ -222,6 +222,14 @@ def parse_rows(all_row_text: List[str]) -> List[Dict[str, Union[str, float]]]:
 
 def pool_dict_to_obj(d: Dict[str, Union[str, float, int]]) -> AlphaHomoraPool:
     """Converts dictionary to object using gets to allow nulls"""
+    # First make sure no weird NaN values by checking x != x
+    # Ref: https://stackoverflow.com/a/944712
+    for k, v in d.items():
+        if v != v:
+            # When nan, set to None
+            d[k] = None
+    
+    # Create record
     record = AlphaHomoraPool(
         timestamp=d.get("timestamp"),
         chain=d.get("chain"),
@@ -432,12 +440,18 @@ def scrape(
         # Optionally save to DB
         if db:
             logging.info(f"Writing {len(data)} records to database.")
-            records = list()
-            for d in data:
-                record = pool_dict_to_obj(d)
-                records.append(record)
-            session.bulk_save_objects(records)
-            session.commit()
+            try:
+                records = list()
+                for d in data:
+                    record = pool_dict_to_obj(d)
+                    records.append(record)
+                session.bulk_save_objects(records)
+                session.commit()
+            except Exception as e:  # NOQA                
+                logging.error(
+                    f"Something bad happend while trying to write records. "
+                    f"Skipping and moving along. Error: {e}."
+                )                
 
         # Wait until next cycle to check
         logging.info("Scrape complete!")
