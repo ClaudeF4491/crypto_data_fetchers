@@ -449,7 +449,7 @@ def scrape(
                 session.commit()
             except Exception as e:  # NOQA                
                 logging.error(
-                    f"Something bad happend while trying to write records. "
+                    f"Something bad happened while trying to write records. "
                     f"Skipping and moving along. Error: {e}."
                 )                
 
